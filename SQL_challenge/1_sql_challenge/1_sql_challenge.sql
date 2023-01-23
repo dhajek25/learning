@@ -84,3 +84,22 @@ WHERE RO = 1;
 "B"		"curry"		2	1
 "B"		"ramen"		2	1
 "C"		"ramen"		3	1
+
+-- 6. Which item was purchased first by the customer after they became a member?
+
+WITH FIRST_PRODUCT AS(
+	SELECT s.customer_id, me.product_name, s.order_date,
+	ROW_NUMBER() OVER (PARTITION BY s.customer_id) AS RN
+	FROM sales s
+	INNER JOIN members m
+	USING (customer_id)
+	INNER JOIN menu me
+	USING (product_id)
+	WHERE s.order_date >= m.join_date)
+SELECT customer_id, product_name, order_date 
+FROM FIRST_PRODUCT
+WHERE RN = 1;
+
+"customer_id"	"product_name"	"order_date"
+"A"		"curry"		"2021-01-07"
+"B"		"sushi"		"2021-01-11"
