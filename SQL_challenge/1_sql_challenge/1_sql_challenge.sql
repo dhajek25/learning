@@ -1,9 +1,6 @@
 -- https://8weeksqlchallenge.com/case-study-1/
-/* 
- * Danny's Diner
- * Case Study #1 Questions
- *  
-*/
+-- Danny's Diner - Case Study 1
+
 
 -- 1. What is the total amount each customer spent at the restaurant?
 
