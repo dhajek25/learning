@@ -89,7 +89,7 @@ WHERE RO = 1;
 
 WITH FIRST_PRODUCT AS(
 	SELECT s.customer_id, me.product_name, s.order_date,
-	ROW_NUMBER() OVER (PARTITION BY s.customer_id) AS RN
+	ROW_NUMBER() OVER (PARTITION BY s.customer_id ORDER BY s.order_date) AS RN
 	FROM sales s
 	INNER JOIN members m
 	USING (customer_id)
@@ -103,3 +103,22 @@ WHERE RN = 1;
 "customer_id"	"product_name"	"order_date"
 "A"		"curry"		"2021-01-07"
 "B"		"sushi"		"2021-01-11"
+
+-- 7. Which item was purchased just before the customer became a member?
+
+WITH BEFORE_MEMBER_PRODUCT AS(
+	SELECT s.customer_id, me.product_name, s.order_date,
+	ROW_NUMBER() OVER (PARTITION BY s.customer_id ORDER BY s.order_date DESC) AS RN
+	FROM sales s
+	INNER JOIN members m
+	USING (customer_id)
+	INNER JOIN menu me
+	USING (product_id)
+	WHERE s.order_date < m.join_date)
+SELECT customer_id, product_name, order_date 
+FROM BEFORE_MEMBER_PRODUCT
+WHERE RN = 1;
+
+"customer_id"	"product_name"	"order_date"
+"A"		"sushi"		"2021-01-01"
+"B"		"sushi"		"2021-01-04"
