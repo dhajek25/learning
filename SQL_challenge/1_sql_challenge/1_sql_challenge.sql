@@ -64,3 +64,16 @@ LIMIT 1;
 
 "product_name"	"count_product"
 "ramen"		8
+
+-- 5. Which item was the most popular for each customer?
+
+WITH TOP_PRODUCT_BY_CUSTOMER AS (
+	SELECT s.customer_id, m.product_name, COUNT(m.product_name),
+	RANK() OVER (PARTITION BY s.customer_id ORDER BY COUNT(m.product_name) DESC) AS RO
+	FROM sales s
+	INNER JOIN menu m
+	USING (product_id)
+	GROUP BY s.customer_id, m.product_name)
+SELECT * 
+FROM TOP_PRODUCT_BY_CUSTOMER
+WHERE RO = 1;
