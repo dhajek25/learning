@@ -15,3 +15,6 @@ Three key datasets for this case study
 - <strong>Menu</strong>: The menu table maps the product_id to the actual product_name and price of each menu item.
 - <strong>Members</strong>: The members table captures the join_date when a customer_id joined the beta version of the Danny’s Diner loyalty program.
 
+## Entity Relationship Diagram
+![alt text]()
+
