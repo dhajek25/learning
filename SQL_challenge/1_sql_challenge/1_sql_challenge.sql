@@ -33,19 +33,19 @@ ORDER BY s.customer_id;
 
 -- 3. What was the first item from the menu purchased by each customer?
 
-WITH CTE_FIRST_MEAL AS (
-SELECT s.customer_id, s.order_date, m.product_name AS first_meal,
-ROW_NUMBER() OVER (PARTITION BY s.customer_id) AS RN
-FROM sales s
-INNER JOIN menu m
-USING (product_id)
-WHERE order_date IN 
-(SELECT min(s.order_date) as min_date
-FROM sales s 
-GROUP BY s.customer_id))
+WITH CTE_FIRST_MEAL AS(
+	SELECT s.customer_id, s.order_date, m.product_name AS first_meal,
+	ROW_NUMBER() OVER (PARTITION BY s.customer_id) AS RN
+	FROM sales s
+	INNER JOIN menu m
+	USING (product_id)
+	WHERE order_date IN 
+		(SELECT min(s.order_date) as min_date
+		FROM sales s 
+		GROUP BY s.customer_id))
 SELECT customer_id, order_date, first_meal
 FROM CTE_FIRST_MEAL
-WHERE RN = 1;
+WHERE RN =1;
 
 "customer_id"	"order_date"	"first_meal"
 "A"	          "2021-01-01"	  "sushi"
