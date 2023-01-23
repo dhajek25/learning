@@ -122,3 +122,22 @@ WHERE RN = 1;
 "customer_id"	"product_name"	"order_date"
 "A"		"sushi"		"2021-01-01"
 "B"		"sushi"		"2021-01-04"
+
+-- 8. What is the total items and amount spent for each member before they became a member?
+
+SELECT s.customer_id, count(me.product_id), sum(me.price)
+FROM sales s
+INNER JOIN menu me
+USING (product_id)
+LEFT JOIN members m 
+ON s.customer_id = m.customer_id WHERE s.order_date < m.join_date
+GROUP BY s.customer_id
+
+UNION
+
+SELECT s.customer_id, count(s.product_id), sum(me.price)
+FROM sales s
+INNER JOIN menu me
+USING (product_id)
+WHERE s.customer_id NOT IN ('A', 'B')
+GROUP BY s.customer_id;
