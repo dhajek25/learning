@@ -29,5 +29,5 @@ There are some known data issues with few tables. Data cleaning was performed an
 - In the cancellation column, there are blank spaces and null values.
 
 ## Entity Relationship Diagram
-![alt text]()
+![alt text](https://github.com/dhajek25/learning/blob/main/SQL_challenge/2_sql_challenge/ERD_2.jpg)
 
