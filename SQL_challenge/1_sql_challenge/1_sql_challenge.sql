@@ -35,7 +35,7 @@ ORDER BY s.customer_id;
 
 WITH CTE_FIRST_MEAL AS (
 SELECT s.customer_id, s.order_date, m.product_name AS first_meal,
-ROW_NUMBER() OVER (PARTITION BY s.customer_id ORDER BY s.order_date, s.product_id) AS RN
+ROW_NUMBER() OVER (PARTITION BY s.customer_id ORDER BY s.customer_id) AS RN
 FROM sales s
 INNER JOIN menu m
 USING (product_id)
