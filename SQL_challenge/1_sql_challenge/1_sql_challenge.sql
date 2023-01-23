@@ -30,3 +30,23 @@ ORDER BY s.customer_id;
 "A"	4
 "B"	6
 "C"	2
+
+-- 3. What was the first item from the menu purchased by each customer?
+
+SELECT s.customer_id, s.order_date, m.product_name AS first_meal
+FROM sales s
+INNER JOIN menu m
+USING (product_id)
+WHERE order_date IN 
+(SELECT min(s.order_date) as min_date
+FROM sales s 
+GROUP BY s.customer_id);
+
+"customer_id"	"order_date"	"first_meal"
+"A"	        "2021-01-01"	  "sushi"
+"A"	        "2021-01-01"	  "curry"
+"B"	        "2021-01-01"	  "curry"
+"C"	        "2021-01-01"	  "ramen"
+"C"	        "2021-01-01"	  "ramen"
+
+
