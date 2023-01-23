@@ -77,3 +77,10 @@ WITH TOP_PRODUCT_BY_CUSTOMER AS (
 SELECT * 
 FROM TOP_PRODUCT_BY_CUSTOMER
 WHERE RO = 1;
+
+"customer_id"	"product_name"	"count"	"ro"
+"A"		"ramen"		3	1
+"B"		"sushi"		2	1
+"B"		"curry"		2	1
+"B"		"ramen"		2	1
+"C"		"ramen"		3	1
