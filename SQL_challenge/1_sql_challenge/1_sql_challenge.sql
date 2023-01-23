@@ -52,4 +52,15 @@ WHERE RN =1;
 "B"	          "2021-01-01"	  "curry"
 "C"	          "2021-01-01"	  "ramen"
 
+-- 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 
+SELECT m.product_name, COUNT(s.product_id) AS count_product
+FROM sales s
+INNER JOIN menu m
+USING(product_id)
+GROUP BY m.product_name
+ORDER BY count_product DESC
+LIMIT 1;
+
+"product_name"	"count_product"
+"ramen"		8
