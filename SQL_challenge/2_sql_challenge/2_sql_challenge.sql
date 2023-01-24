@@ -73,3 +73,45 @@ ORDER BY c.customer_id;
 
 -- 6. What was the maximum number of pizzas delivered in a single order?
 
+WITH CTE_MAX_PIZZAS AS(
+SELECT order_id, sum(pizza_id) as MOST_PIZZAS
+FROM customer_orders
+GROUP BY order_id)
+SELECT MAX(MOST_PIZZAS) AS HIGHEST_PIZZAS_ORDER
+FROM CTE_MAX_PIZZAS;
+
+"highest_pizzas_order"
+4
+
+-- 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+
+SELECT c.customer_id,
+	SUM(CASE
+		WHEN exclusions IS NOT NULL OR extras IS NOT NULL THEN 1
+		ELSE 0
+	END) AS has_changes,
+	SUM(CASE
+		WHEN exclusions IS NULL AND extras IS NULL THEN 1
+		ELSE 0
+	END) AS no_changes
+FROM customer_orders c
+INNER JOIN runner_orders ro
+USING (order_id)
+WHERE ro.cancellation IS NULL
+GROUP BY c.customer_id;
+
+"customer_id"	"has_changes"	"no_changes"
+101	            0	          2
+102	            0	          3
+103	            3	          0
+104	            2	          1
+105	            1	          0
+
+-- 8. How many pizzas were delivered that had both exclusions and extras?
+
+SELECT COUNT(order_id) AS SPECIFIC_PIZZA
+FROM customer_orders
+WHERE exclusions IS NOT NULL AND extras IS NOT NULL;
+
+"specific_pizza"
+2
