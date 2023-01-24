@@ -38,3 +38,38 @@ ORDER BY runner_id;
   1	          4
   2	          3
   3	          1
+  
+-- 4. How many of each type of pizza was delivered?
+
+SELECT pn.pizza_name, COUNT(pn.pizza_name) AS num_orders
+FROM customer_orders c
+INNER JOIN runner_orders ro
+USING (order_id)
+INNER JOIN pizza_names pn
+USING (pizza_id)
+WHERE ro.cancellation IS NULL
+GROUP BY pn.pizza_name;
+
+-- 5. How many Vegetarian and Meatlovers were ordered by each customer?
+
+SELECT c.customer_id, pn.pizza_name, COUNT(pn.pizza_name) AS num_orders
+FROM customer_orders c
+INNER JOIN runner_orders ro
+USING (order_id)
+INNER JOIN pizza_names pn
+USING (pizza_id)
+WHERE ro.cancellation IS NULL
+GROUP BY c.customer_id, pn.pizza_name
+ORDER BY c.customer_id;
+
+"customer_id"	"pizza_name"	"num_orders"
+101	    "Meatlovers"	        2
+102	    "Meatlovers"	        2
+102	    "Vegetarian"	        1
+103	    "Meatlovers"	        2
+103	    "Vegetarian"	        1
+104	    "Meatlovers"	        3
+105 	  "Vegetarian"	        1
+
+-- 6. What was the maximum number of pizzas delivered in a single order?
+
