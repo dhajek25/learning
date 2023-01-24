@@ -12,6 +12,7 @@ ALTER TABLE runner_orders ALTER COLUMN pickup_time TYPE timestamp USING pickup_t
 UPDATE runner_orders SET distance = regexp_replace(distance, '[^0-9.]', '', 'g');
 UPDATE runner_orders SET duration = regexp_replace(duration, '[^0-9.]', '', 'g');
 
+-- PART A
 -- 1. How many pizzas were ordered?
 
 SELECT COUNT(*) as num_pizzas FROM customer_orders;
@@ -145,3 +146,17 @@ ORDER BY day_week;
 "saturday "	5
 "thursday "	3
 "wednesday"	5
+
+-- PART B
+-- 1. How many runners signed up for each 1 week period?
+
+SELECT TO_CHAR(registration_date, 'W') AS week_number, count(runner_id) AS signed_runner
+FROM runners
+GROUP BY week_number
+ORDER BY week_number;
+
+"week_number"	"signed_runner"
+	"1"		2
+	"2"		1
+	"3"		1
+
