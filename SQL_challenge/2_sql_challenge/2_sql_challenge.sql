@@ -117,3 +117,31 @@ WHERE c.exclusions IS NOT NULL AND c.extras IS NOT NULL AND ro.cancellation IS N
 
 "specific_pizza"
 1
+
+-- 9. What was the total volume of pizzas ordered for each hour of the day?
+
+SELECT EXTRACT(hour from order_time) AS order_hour , COUNT(*)
+FROM customer_orders
+GROUP BY order_hour
+ORDER BY order_hour;
+
+"order_hour"	"count"
+11		1
+13		3
+18		3
+19		1
+21		3
+23		3
+
+-- 10. What was the volume of orders for each day of the week?
+
+SELECT TO_CHAR(order_time, 'day') AS day_week, count(*) AS num_orders
+FROM customer_orders
+GROUP BY day_week
+ORDER BY day_week;
+
+"day_week"	"num_orders"
+"friday   "	1
+"saturday "	5
+"thursday "	3
+"wednesday"	5
