@@ -109,9 +109,11 @@ GROUP BY c.customer_id;
 
 -- 8. How many pizzas were delivered that had both exclusions and extras?
 
-SELECT COUNT(order_id) AS SPECIFIC_PIZZA
-FROM customer_orders
-WHERE exclusions IS NOT NULL AND extras IS NOT NULL;
+SELECT COUNT(c.order_id) AS SPECIFIC_PIZZA
+FROM customer_orders c 
+INNER JOIN runner_orders ro
+USING (order_id)
+WHERE c.exclusions IS NOT NULL AND c.extras IS NOT NULL AND ro.cancellation IS NULL;
 
 "specific_pizza"
-2
+1
