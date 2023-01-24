@@ -165,32 +165,30 @@ GROUP BY s.customer_id;
 
 -- 1O. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
 
-WITH cte_jan_member_points AS (
-	SELECT m.customer_id AS customer,
-		SUM(
-			CASE
-				WHEN s.order_date < m.join_date THEN 
-					CASE
-						WHEN m2.product_name = 'sushi' THEN (m2.price * 20)
-						ELSE (m2.price * 10)
-					END
-				WHEN s.order_date > (m.join_date + 6) THEN 
-					CASE
-						WHEN m2.product_name = 'sushi' THEN (m2.price * 20)
-						ELSE (m2.price * 10)
-					END
-				ELSE (m2.price * 20)
-			END
-		) AS member_points
-	FROM members AS m
-		JOIN sales AS s ON s.customer_id = m.customer_id
-		JOIN menu AS m2 ON s.product_id = m2.product_id
-	WHERE s.order_date <= '2021-01-31'
-	GROUP BY customer
-)
-SELECT *
-FROM cte_jan_member_points
-ORDER BY customer;
+SELECT s.customer_id,
+	SUM(
+		CASE
+			WHEN s.order_date < m.join_date THEN
+				CASE 
+					WHEN me.product_name ILIKE ('sushi') THEN (price * 20)
+					WHEN me.product_name NOT ILIKE ('sushi') THEN (price * 10)
+				END
+			WHEN s.order_date > (m.join_date + 6) THEN
+				CASE
+					WHEN me.product_name ILIKE ('sushi') THEN (price * 20)
+					WHEN me.product_name NOT ILIKE ('sushi') THEN (price * 20)
+				END
+			ELSE price * 20
+		END
+	)AS total_points
+FROM sales s
+INNER JOIN menu me
+USING (product_id)
+INNER JOIN members m
+USING (customer_id)
+WHERE s.order_date <= '2021-01-31'
+GROUP BY s.customer_id;
+
 
 "customer_id"	"total_points"
 "A"		1370
