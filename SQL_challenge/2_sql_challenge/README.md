@@ -1,3 +1,5 @@
+https://8weeksqlchallenge.com/case-study-2/
+
 ## Introduction
 Danny was scrolling through his Instagram feed when something really caught his eye - “80s Retro Styling and Pizza Is The Future!”
 
