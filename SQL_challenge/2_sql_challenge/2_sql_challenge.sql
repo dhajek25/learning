@@ -196,3 +196,18 @@ GROUP BY num_pizzas;
 2		"00:18:22.5"
 3		"00:29:17"
 
+-- 4. What was the average distance travelled for each customer?
+
+SELECT c.customer_id, ROUND(AVG(r.distance)) AS avg_distance
+FROM customer_orders c
+INNER JOIN runner_orders r
+USING (order_id)
+GROUP BY c.customer_id
+ORDER BY c.customer_id;
+
+"customer_id"	"avg_distance"
+101		20
+102		17
+103		23
+104		10
+105		25
