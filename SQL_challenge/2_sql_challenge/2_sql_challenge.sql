@@ -70,7 +70,7 @@ ORDER BY c.customer_id;
 103	    "Meatlovers"	        2
 103	    "Vegetarian"	        1
 104	    "Meatlovers"	        3
-105 	  "Vegetarian"	        1
+105 	  	"Vegetarian"	        1
 
 -- 6. What was the maximum number of pizzas delivered in a single order?
 
@@ -176,3 +176,23 @@ GROUP BY runner_id;
 1		15.33
 2		23.40
 3		10.00
+
+-- 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
+
+WITH CTE_AVG_ON_ORDER AS(
+	SELECT c.order_id, AVG(r.pickup_time - c.order_time) AS avg_time, COUNT(c.pizza_id) AS num_pizzas
+	FROM customer_orders c 
+	INNER JOIN runner_orders r
+	USING (order_id)
+	WHERE r.cancellation IS NULL
+	GROUP BY c.order_id
+)
+SELECT AVG(avg_time) AS avg_order_time
+FROM CTE_AVG_ON_ORDER
+GROUP BY num_pizzas;
+
+"num_pizzas"	"avg_order_time"
+1		"00:12:21.4"
+2		"00:18:22.5"
+3		"00:29:17"
+
