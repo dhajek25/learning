@@ -75,14 +75,14 @@ ORDER BY c.customer_id;
 -- 6. What was the maximum number of pizzas delivered in a single order?
 
 WITH CTE_MAX_PIZZAS AS(
-SELECT order_id, sum(pizza_id) as MOST_PIZZAS
+SELECT order_id, COUNT(pizza_id) as MOST_PIZZAS
 FROM customer_orders
 GROUP BY order_id)
 SELECT MAX(MOST_PIZZAS) AS HIGHEST_PIZZAS_ORDER
 FROM CTE_MAX_PIZZAS;
 
 "highest_pizzas_order"
-4
+3
 
 -- 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 
