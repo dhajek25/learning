@@ -160,3 +160,19 @@ ORDER BY week_number;
 	"2"		1
 	"3"		1
 
+-- 2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
+
+WITH CTE_AVG_TIME AS(
+	SELECT r.runner_id, EXTRACT(minutes from (r.pickup_time - c.order_time)) AS time_diff
+	FROM customer_orders c 
+	INNER JOIN runner_orders r
+	USING (order_id)
+	WHERE r.cancellation IS NULL)
+SELECT runner_id, ROUND(AVG(time_diff), 2) AS time_diff_mins
+FROM CTE_AVG_TIME
+GROUP BY runner_id;
+
+"runner_id"	"time_diff_mins"
+1		15.33
+2		23.40
+3		10.00
