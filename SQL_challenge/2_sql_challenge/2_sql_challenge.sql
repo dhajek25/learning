@@ -212,6 +212,21 @@ ORDER BY c.customer_id;
 104		10
 105		25
 
+-- 5. What was the difference between the longest and shortest delivery times for all orders?
+
+WITH CTE_TIME_DIFF AS (
+	SELECT c.order_id, r.pickup_time - c.order_time AS time_diff
+	FROM customer_orders c 
+	INNER JOIN runner_orders r
+	USING (order_id)
+	WHERE r.cancellation IS NULL
+)
+SELECT MIN(time_diff), MAX(time_diff), MAX(time_diff) - MIN(time_diff) AS LONG_SHORT_DIFF
+FROM CTE_TIME_DIFF;
+
+"min"		"max"		"long_short_diff"
+"00:10:02"	"00:29:17"	"00:19:15"
+
 -- 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
 
 WITH CTE_RUNNER_SPEED AS (
@@ -228,3 +243,13 @@ GROUP BY r.runner_id, c.order_id
 )
 SELECT *, ROUND(((distance/delivery_time) * 60)) AS RUNNER_SPEED_KMH
 FROM CTE_RUNNER_SPEED;
+
+"runner_id"	"order_id"	"delivery_time"	"distance"	"num_pizzas"	"runner_speed_kmh"
+1		1		32		20			1		38
+1		2		27		20			1		44
+1		3		20		13			2		39
+1		10		10		10			2		60
+2		4		40		23			3		34
+2		7		25		25			1		60
+2		8		15		23			1		92
+3		5		15		10			1		40
