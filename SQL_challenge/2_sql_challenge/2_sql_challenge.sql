@@ -211,3 +211,20 @@ ORDER BY c.customer_id;
 103		23
 104		10
 105		25
+
+-- 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
+
+WITH CTE_RUNNER_SPEED AS (
+SELECT 
+	r.runner_id, c.order_id, 
+	ROUND(AVG(r.duration)) AS delivery_time, 
+	ROUND(AVG(r.distance)) AS distance, 
+	COUNT(c.pizza_id) AS num_pizzas
+FROM customer_orders c
+INNER JOIN runner_orders r
+USING(order_id)
+WHERE r.cancellation IS NULL
+GROUP BY r.runner_id, c.order_id
+)
+SELECT *, ROUND(((distance/delivery_time) * 60)) AS RUNNER_SPEED_KMH
+FROM CTE_RUNNER_SPEED;
