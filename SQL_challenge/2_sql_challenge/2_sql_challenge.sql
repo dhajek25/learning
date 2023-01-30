@@ -253,3 +253,27 @@ FROM CTE_RUNNER_SPEED;
 2		7		25		25			1		60
 2		8		15		23			1		92
 3		5		15		10			1		40
+
+-- 7. What is the successful delivery percentage for each runner?
+
+WITH CTE_SUCC_RUN AS (
+	SELECT runner_id, COUNT(runner_id) AS success_run
+	FROM runner_orders
+	WHERE cancellation IS NULL
+	GROUP BY runner_id
+),
+	CTE_TOTAL_RUN AS (
+	SELECT runner_id, COUNT(runner_id) AS total_run
+	FROM runner_orders
+	GROUP BY runner_id
+)
+SELECT CSR.runner_id, ROUND(100 * CSR.success_run/CTR.total_run) AS runner_percentage
+FROM 
+CTE_SUCC_RUN CSR, CTE_TOTAL_RUN CTR
+WHERE CSR.runner_id = CTR.runner_id
+ORDER BY runner_id;
+
+"runner_id"	"runner_percentage"
+1		100
+2		75
+3		50
